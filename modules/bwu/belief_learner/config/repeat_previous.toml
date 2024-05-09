@@ -1,0 +1,240 @@
+start_wae = 200
+evaluate_n = 0
+show_plots = false
+total_steps = 1000000
+belief_a2c_worker = true
+start_interaction = 10000
+round_robin_weights = [ 1, 1,]
+belief_a2c_dual_optim = false
+
+[wae]
+cost_fn = "l2"
+summary = false
+n_critic = 5
+batch_norm = false
+batch_size = 256
+buffer_size = 1000000
+use_wae_gan = false
+distillation = true
+maximizer_lr = 0.001
+minimizer_lr = 0.0003
+emb_state_size = 128
+optimizer_name = "adam"
+latent_state_size = 20
+wae_gan_stop_grad = false
+clip_by_global_norm = 100
+squared_wasserstein = false
+emb_observation_size = 128
+n_observation_wae_gan = 1
+wae_gan_pretrain_steps = 0
+observation_regularizer = true
+state_prior_temperature = 0.5
+state_encoder_temperature = 0.6666666
+wae_gan_target_update_freq = 1
+wae_gan_clip_by_global_norm = 1
+observation_wae_maximizer_lr = 5e-5
+observation_wae_minimizer_lr = 0.001
+observation_regularizer_scaling = 1
+observation_regularizer_same_opt = false
+wae_gan_regularizer_scale_factor = 1
+
+[belief]
+use_gru = false
+n_critic = 5
+optimizer = "adam"
+batch_norm = false
+batch_size = 32
+buffer_size = 16384
+belief_shape = [ 128,]
+learning_rate = 1
+filter_variance = 0.01
+n_state_samples = 32
+sub_belief_shape = [ 128,]
+belief_loss_factor = 1e-5
+clip_by_global_norm = 10
+n_next_state_samples = 64
+use_normalizing_term = true
+use_running_variance = true
+filter_variance_target = 0.001
+normalize_log_obs_filter = true
+reward_loss_scale_factor = 100
+sub_belief_prior_temperature = 0.6666666
+transition_loss_scale_factor = 50
+gradient_penalty_scale_factor = 10
+
+[policy]
+alg = "a2c"
+tau = 1
+seed = 0
+gamma = 0.99
+lambda_ = 1
+use_huber = false
+batch_norm = false
+buffer_size = 10000
+value_weight = 0.5
+learning_rate = 0.0001
+policy_weight = 1
+share_network = false
+entropy_weight = 0.001
+learn_with_img = false
+optimizer_name = "Adam"
+nbr_environments = 16
+multi_process_env = false
+env_step_per_batch = 2
+target_update_freq = 100
+clip_by_global_norm = 10
+normalize_advantage = false
+learn_sub_belief_encoder = false
+
+[env.config]
+p_blank = 0
+env_name = "popgym-RepeatPreviousEasyPlus-v0"
+reset_state_pad = -1
+
+[wae.reward_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "reward_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.cost_weights]
+state = [ 2, 1,]
+
+[wae.transition_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "transition_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.latent_policy_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "latent_policy_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.latent_embedding_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "latent_embedding_arch"
+batch_norm = false
+raw_last = true
+transpose = false
+
+[wae.state_decoder_fc_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "state_decoder_fc_arch"
+batch_norm = false
+raw_last = true
+transpose = false
+
+[wae.state_encoder_fc_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "state_encoder_fc_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.latent_stationary_arch]
+hidden_units = [ 32,]
+activation = "elu"
+name = "latent_stationary_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.wae_gan_discriminator_arch]
+hidden_units = [ 128, 128, 128,]
+activation = "elu"
+name = "latent_discriminator"
+batch_norm = false
+raw_last = true
+transpose = false
+
+[wae.observation_decoder_fc_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "observation_decoder_fc_arch"
+batch_norm = false
+raw_last = true
+transpose = false
+
+[wae.observation_encoder_fc_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "observation_encoder_fc_arch"
+batch_norm = false
+raw_last = true
+transpose = false
+
+[wae.steady_state_lipschitz_arch]
+hidden_units = [ 128, 128,]
+activation = "tanh"
+name = "steady_state_lipschitz_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.latent_deembedding_state_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "latent_deembedding_state_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.transition_loss_lipschitz_arch]
+hidden_units = [ 128, 128,]
+activation = "tanh"
+name = "transition_loss_lipschitz_arch"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[wae.latent_deembedding_observation_arch]
+hidden_units = [ 128, 128,]
+activation = "elu"
+name = "latent_deembedding_observation_arch"
+batch_norm = false
+raw_last = true
+transpose = false
+
+[wae.wasserstein_regularizer_scale_factor]
+global_gradient_penalty_multiplier = 10
+steady_state_scaling = 100
+local_transition_loss_scaling = 80
+observation_regularizer_scaling = 1
+observation_regularizer_gradient_penalty_multiplier = 1000
+
+[belief.made_architecture]
+hidden_units = [ 128, 128,]
+activation = "elu"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[belief.sub_model_architecture]
+hidden_units = [ 128,]
+activation = "elu"
+batch_norm = false
+raw_last = false
+transpose = false
+
+[policy.policy_architecture]
+hidden_units = [ 128,]
+activation = "elu"
+name = "policy_network"
+batch_norm = false
+raw_last = true
+transpose = false
+
+[env.env_maker.function]
+module = "belief_learner.utils.env.maker"
+name = "env_maker"
